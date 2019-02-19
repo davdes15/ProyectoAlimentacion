@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">ProyectoAlimentacion</string>
+    <string-array name="planets_array">
+        <item>Bebidas</item>
+        <item>Carnes</item>
+        <item>Verduras</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
