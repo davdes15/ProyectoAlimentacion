@@ -31,15 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        DBHelper helper = new DBHelper(MainActivity.this);
-        SQLiteDatabase al = helper.getReadableDatabase();
-        String [] campos = {"Alimento"};
-        Cursor c = al.query("bebidas",campos,null,null,null,null,null,null);
-        String s;
-        while(c.moveToNext()){
-            s = c.getString(0);
-            Log.i("ALIMENTO",s);
-        }
+
         footypes = getResources().getStringArray(R.array.planets_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);

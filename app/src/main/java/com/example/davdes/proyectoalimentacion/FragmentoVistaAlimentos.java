@@ -3,6 +3,8 @@ package com.example.davdes.proyectoalimentacion;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -10,11 +12,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 
 /**
@@ -38,6 +44,7 @@ public class FragmentoVistaAlimentos extends Fragment {
     private TextView tvFragment;
     private OnFragmentInteractionListener mListener;
     private int posicion;
+    private ArrayList<String> alim;
 
     public FragmentoVistaAlimentos() {
         // Required empty public constructor
@@ -85,6 +92,43 @@ public class FragmentoVistaAlimentos extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         tvFragment = (TextView) view.findViewById(R.id.tvFragment);
         tvFragment.setText("Posicion: "+posicion);
+        ListView lv = (ListView) view.findViewById(R.id.listalim);
+        DBHelper helper= new DBHelper(view.getContext());
+        SQLiteDatabase al = helper.getReadableDatabase();
+        String []campos = {"Alimento"};
+        alim = new ArrayList<>(0);
+        Cursor c;
+        String s = "";
+        switch(posicion){
+            case 0:
+
+                c = al.query("bebidas",campos,null,null,null,null,null,null);
+
+                while(c.moveToNext()){
+                    s = c.getString(0);
+                    //Log.i("ALIMENTO",s);
+                    alim.add(s);
+                }
+                lv.setAdapter(new AdapterAlimentos(getActivity(),alim));
+                c.close();
+                break;
+            case 1:
+                helper = new DBHelper(view.getContext());
+                 c = al.query("lácteos",campos,null,null,null,null,null,null);
+
+                while(c.moveToNext()){
+                    s = c.getString(0);
+                    //Log.i("ALIMENTO",s);
+                    alim.add(s);
+                }
+                lv.setAdapter(new AdapterAlimentos(getActivity(),alim));
+
+               //Log.i("MENSAJE",String.valueOf(c.getCount()));
+                c.close();
+                break;
+            case 2:
+                break;
+        }
         final View v = view;
         ((Button) view.findViewById(R.id.button1)).setOnClickListener(new View.OnClickListener() {
             @Override
