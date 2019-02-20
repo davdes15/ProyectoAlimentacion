@@ -2,10 +2,26 @@
     <string name="app_name">ProyectoAlimentacion</string>
     <string-array name="planets_array">
         <item>Bebidas</item>
-        <item>Carnes</item>
-        <item>Verduras</item>
+        <item>Cereais e Derivados</item>
+        <item>Froita</item>
+        <item>Lácteos</item>
+        <item>Legumes</item>
+        <item>Ovos</item>
+        <item>Sementes e Froitos Secos</item>
+        <item>Verduras e Hortalizas</item>
     </string-array>
+    <string-array name="tablas">
+        <item>bebidas</item>
+        <item>cereais e derivados</item>
+        <item>froita</item>
+        <item>lácteos</item>
+        <item>legumes</item>
+        <item>ovos</item>
+        <item>sementes e froitos secos</item>
+        <item>verduras e hortalizas.</item>
+    </string-array>
+    <string name="beb">Bebidas</string>
+    <string name="car">Carnes</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

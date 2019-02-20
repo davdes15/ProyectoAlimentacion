@@ -9,22 +9,25 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 
 /**
- * A simple {@link Fragment} subclass.
+ * A simple {@link androidx.fragment.app.Fragment} subclass.
  * Activities that contain this fragment must implement the
  * {@link FragmentoVistaAlimentos.OnFragmentInteractionListener} interface
  * to handle interaction events.
@@ -71,7 +74,7 @@ public class FragmentoVistaAlimentos extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle i= getArguments();
+        Bundle i = getArguments();
         posicion = i.getInt("posicion");
 
         if (getArguments() != null) {
@@ -90,47 +93,51 @@ public class FragmentoVistaAlimentos extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        tvFragment = (TextView) view.findViewById(R.id.tvFragment);
-        tvFragment.setText("Posicion: "+posicion);
+        //tvFragment = (TextView) view.findViewById(R.id.tvFragment);
+        // tvFragment.setText("Posicion: " + posicion);
+        final String ud = posicion == 0 ? "l" : "g";
+        String[] alimentos = view.getResources().getStringArray(R.array.tablas);
+        final String tablaactual = alimentos[posicion];
         ListView lv = (ListView) view.findViewById(R.id.listalim);
-        DBHelper helper= new DBHelper(view.getContext());
-        SQLiteDatabase al = helper.getReadableDatabase();
-        String []campos = {"Alimento"};
+        DBHelper helper = new DBHelper(view.getContext());
+        final SQLiteDatabase al = helper.getReadableDatabase();
+        String[] campos = {"Alimento"};
         alim = new ArrayList<>(0);
         Cursor c;
         String s = "";
-        switch(posicion){
-            case 0:
+        c = al.rawQuery("SELECT * FROM '"+tablaactual+"'",null);
 
-                c = al.query("bebidas",campos,null,null,null,null,null,null);
-
-                while(c.moveToNext()){
-                    s = c.getString(0);
-                    //Log.i("ALIMENTO",s);
-                    alim.add(s);
-                }
-                lv.setAdapter(new AdapterAlimentos(getActivity(),alim));
-                c.close();
-                break;
-            case 1:
-                helper = new DBHelper(view.getContext());
-                 c = al.query("lácteos",campos,null,null,null,null,null,null);
-
-                while(c.moveToNext()){
-                    s = c.getString(0);
-                    //Log.i("ALIMENTO",s);
-                    alim.add(s);
-                }
-                lv.setAdapter(new AdapterAlimentos(getActivity(),alim));
-
-               //Log.i("MENSAJE",String.valueOf(c.getCount()));
-                c.close();
-                break;
-            case 2:
-                break;
+        while (c.moveToNext()) {
+            s = c.getString(0);
+            //Log.i("ALIMENTO",s);
+            alim.add(s);
         }
+        lv.setAdapter(new AdapterAlimentos(getActivity(), alim));
+        c.close();
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String alimento = alim.get(position);
+                String[] campos = {alimento};
+                Cursor c = al.query("'"+tablaactual+"'", null, "Alimento=", campos, null, null, null);
+
+                final Dialog fbDialogue = new Dialog(view.getContext(), android.R.style.Theme_Black_NoTitleBar);
+                fbDialogue.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
+                fbDialogue.setContentView(R.layout.dialogo_comida);
+
+                fbDialogue.setCancelable(true);
+                fbDialogue.show();
+                c.moveToNext();
+                ((TextView) fbDialogue.findViewById(R.id.tvnombredialog)).setText(String.valueOf(c.getString(0)));
+                ((TextView) fbDialogue.findViewById(R.id.tvaz)).setText(String.valueOf(c.getString(1) + "g"));
+                ((TextView) fbDialogue.findViewById(R.id.tvgs)).setText(String.valueOf(c.getString(2) + "g"));
+                ((TextView) fbDialogue.findViewById(R.id.tvs)).setText(String.valueOf(c.getString(3) + "mg"));
+            }
+
+
+        });
         final View v = view;
-        ((Button) view.findViewById(R.id.button1)).setOnClickListener(new View.OnClickListener() {
+        /*((Button) view.findViewById(R.id.button1)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Dialog fbDialogue = new Dialog(v.getContext(), android.R.style.Theme_Black_NoTitleBar);
@@ -139,7 +146,7 @@ public class FragmentoVistaAlimentos extends Fragment {
                 fbDialogue.setCancelable(true);
                 fbDialogue.show();
             }
-        });
+        });*/
     }
 
     // TODO: Rename method, update argument and hook method into UI event
