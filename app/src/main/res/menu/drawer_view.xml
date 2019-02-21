@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_beb"
+            android:icon="@mipmap/ic_launcher_round"
+            android:title="Bebidas" />
+        <item
+            android:id="@+id/nav_cer"
+            android:icon="@mipmap/ic_launcher_round"
+            android:title="Cereais e Derivados" />
+        <item
+            android:id="@+id/nav_fr"
+            android:icon="@mipmap/ic_launcher_round"
+            android:title="Froita" />
+        <item
+            android:id="@+id/nav_lac"
+            android:icon="@mipmap/ic_launcher_round"
+            android:title="Lácteos" />
+        <item
+            android:id="@+id/nav_leg"
+            android:icon="@mipmap/ic_launcher_round"
+            android:title="Legumes" />
+        <item
+            android:id="@+id/nav_ov"
+            android:icon="@mipmap/ic_launcher_round"
+            android:title="Ovos" />
+        <item
+            android:id="@+id/nav_sem"
+            android:icon="@mipmap/ic_launcher_round"
+            android:title="Sementes e Froitos Secos" />
+        <item
+            android:id="@+id/nav_verd"
+            android:icon="@mipmap/ic_launcher_round"
+            android:title="Verduras e Hortalizas" />
+
+    </group>
+
+</menu>
