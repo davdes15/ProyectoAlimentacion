@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+
+
         footypes = getResources().getStringArray(R.array.planets_array);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -52,6 +54,12 @@ public class MainActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, footypes));
         // Set the list's click listener
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+        Fragment fragment = new Fragment_main();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_pane, fragment).commit();
 
 
     }
@@ -73,8 +81,7 @@ public class MainActivity extends AppCompatActivity {
             FragmentManager fragmentManager = getSupportFragmentManager();
 
             fragmentManager.beginTransaction()
-                    .replace(R.id.content_pane, fragment).addToBackStack("fragmentini")
-                    .commit();
+                    .replace(R.id.content_pane, fragment).addToBackStack("fragmentini").commit();
 
 
             // Highlight the selected item, update the title, and close the drawer

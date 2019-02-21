@@ -14,6 +14,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -44,10 +47,13 @@ public class FragmentoVistaAlimentos extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private TextView tvFragment;
+    private TextView tvFragment, tvtitlep, tvtitleg;
     private OnFragmentInteractionListener mListener;
     private int posicion;
     private ArrayList<String> alim;
+    ListView lv;
+    int TIMES = 0;
+    boolean anima = false;
 
     public FragmentoVistaAlimentos() {
         // Required empty public constructor
@@ -96,16 +102,21 @@ public class FragmentoVistaAlimentos extends Fragment {
         //tvFragment = (TextView) view.findViewById(R.id.tvFragment);
         // tvFragment.setText("Posicion: " + posicion);
         final String ud = posicion == 0 ? "l" : "g";
+        String[] cat = view.getResources().getStringArray(R.array.planets_array);
         String[] alimentos = view.getResources().getStringArray(R.array.tablas);
         final String tablaactual = alimentos[posicion];
-        ListView lv = (ListView) view.findViewById(R.id.listalim);
+        lv = (ListView) view.findViewById(R.id.listalim);
+        tvtitleg = (TextView) view.findViewById(R.id.tvtitleg);
+        tvtitlep = (TextView) view.findViewById(R.id.tvtitlep);
+        tvtitleg.setText(cat[posicion]);
+        tvtitlep.setText(cat[posicion]);
         DBHelper helper = new DBHelper(view.getContext());
         final SQLiteDatabase al = helper.getReadableDatabase();
         String[] campos = {"Alimento"};
         alim = new ArrayList<>(0);
         Cursor c;
         String s = "";
-        c = al.rawQuery("SELECT * FROM '"+tablaactual+"'",null);
+        c = al.rawQuery("SELECT * FROM '" + tablaactual + "'", null);
 
         while (c.moveToNext()) {
             s = c.getString(0);
@@ -117,9 +128,10 @@ public class FragmentoVistaAlimentos extends Fragment {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                anima = false;
                 String alimento = alim.get(position);
                 String[] campos = {alimento};
-                Cursor c = al.query("'"+tablaactual+"'", null, "Alimento=", campos, null, null, null);
+                Cursor c = al.query("'" + tablaactual + "'", null, "Alimento='" + alimento + "'", null, null, null, null);
 
                 final Dialog fbDialogue = new Dialog(view.getContext(), android.R.style.Theme_Black_NoTitleBar);
                 fbDialogue.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
@@ -137,16 +149,76 @@ public class FragmentoVistaAlimentos extends Fragment {
 
         });
         final View v = view;
-        /*((Button) view.findViewById(R.id.button1)).setOnClickListener(new View.OnClickListener() {
+        lv.setOnScrollListener(new AbsListView.OnScrollListener() {
+            private int mLastFirstVisibleItem;
+            private int firstVisibleItem,  visibleItemCount, totalItemCount;
             @Override
-            public void onClick(View v) {
-                final Dialog fbDialogue = new Dialog(v.getContext(), android.R.style.Theme_Black_NoTitleBar);
-                fbDialogue.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
-                fbDialogue.setContentView(R.layout.dialogo_comida);
-                fbDialogue.setCancelable(true);
-                fbDialogue.show();
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                Animation slide = AnimationUtils.loadAnimation(view.getContext(), R.anim.slide_anim);
+                if (firstVisibleItem == 0) {
+                    // check if we reached the top or bottom of the list
+                    View v = lv.getChildAt(0);
+
+                    int offset = (v == null) ? 0 : v.getTop();
+                    if (offset == 0) {
+
+                        tvtitlep.setVisibility(View.GONE);
+                        /*if (TIMES !=0) {
+                            Log.i("ANIM",String.valueOf(TIMES));
+                            tvtitleg.startAnimation(slide);
+                        }*/
+
+                        tvtitleg.setVisibility(View.VISIBLE);
+                        anima = false;
+
+                    }
+                }
+
             }
-        });*/
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                Animation slide = AnimationUtils.loadAnimation(view.getContext(), R.anim.slide_anim);
+                if (firstVisibleItem == 0) {
+                    // check if we reached the top or bottom of the list
+                    View v = lv.getChildAt(0);
+
+                    int offset = (v == null) ? 0 : v.getTop();
+                    if (offset == 0) {
+
+                        tvtitlep.setVisibility(View.GONE);
+                        if (anima) {
+                            Log.i("ANIM", String.valueOf(TIMES));
+                            tvtitleg.startAnimation(slide);
+                        }
+
+                        tvtitleg.setVisibility(View.VISIBLE);
+
+
+                    }
+                }
+                this.firstVisibleItem = firstVisibleItem;
+                this.visibleItemCount = visibleItemCount;
+                this.totalItemCount = totalItemCount;
+                if (mLastFirstVisibleItem < firstVisibleItem) {
+                    Log.i("SCROLLING DOWN", "TRUE");
+
+                    tvtitleg.setVisibility(View.GONE);
+
+                    tvtitlep.setVisibility(View.VISIBLE);
+                    anima = true;
+                }
+                if (mLastFirstVisibleItem > firstVisibleItem) {
+                    Log.i("SCROLLING UP", "TRUE");
+                }
+                mLastFirstVisibleItem = firstVisibleItem;
+            }
+
+            private boolean listIsAtTop() {
+                if (lv.getChildCount() == 0) return true;
+                return lv.getChildAt(0).getTop() == 0;
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event
