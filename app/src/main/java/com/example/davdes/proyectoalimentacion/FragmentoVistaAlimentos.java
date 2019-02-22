@@ -57,6 +57,7 @@ public class FragmentoVistaAlimentos extends Fragment {
     ListView lv;
     int TIMES = 0;
     boolean anima = false;
+    ArrayList<Alimento> sel;
 
     public FragmentoVistaAlimentos() {
         // Required empty public constructor
@@ -85,6 +86,7 @@ public class FragmentoVistaAlimentos extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle i = getArguments();
         posicion = i.getInt("posicion");
+        sel = (ArrayList<Alimento>) i.getSerializable("seleccionados");
 
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -196,10 +198,16 @@ public class FragmentoVistaAlimentos extends Fragment {
                 }else{
                     ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.correcto));
                 }
+                for(Alimento a : sel){
+                    if (c.getString(0).equals(a.getNombre())){
+                        ((Button) fbDialogue.findViewById(R.id.btnaddmenu)).setEnabled(false);
+                    }
+                }
                 ((Button) fbDialogue.findViewById(R.id.btnaddmenu)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        v.setEnabled(false);
+                        sel.add(al);
                     }
                 });
             }

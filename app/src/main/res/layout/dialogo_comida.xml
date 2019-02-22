@@ -19,14 +19,16 @@
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:background="@drawable/incorrecto" />
+
         <TextView
             android:id="@+id/asist"
             android:layout_width="wrap_content"
             android:layout_height="2dp"
-            app:layout_constraintTop_toTopOf="@id/tvresultado"
             app:layout_constraintBottom_toBottomOf="@id/tvresultado"
             app:layout_constraintLeft_toLeftOf="@id/tvresultado"
-            app:layout_constraintRight_toRightOf="@id/tvresultado"/>
+            app:layout_constraintRight_toRightOf="@id/tvresultado"
+            app:layout_constraintTop_toTopOf="@id/tvresultado" />
+
         <TextView
             android:id="@+id/divisoria"
             android:layout_width="match_parent"
@@ -68,17 +70,18 @@
                 app:layout_constraintEnd_toEndOf="@id/as"
                 app:layout_constraintStart_toStartOf="@id/as"
                 app:layout_constraintTop_toBottomOf="@id/as" />
+
             <TextView
                 android:id="@+id/tvnombredialog"
-                app:layout_constraintBottom_toTopOf="@id/gs"
-                app:layout_constraintTop_toBottomOf="@id/img"
-                app:layout_constraintRight_toRightOf="@id/gs"
-                app:layout_constraintLeft_toLeftOf="@id/gs"
-                android:layout_marginBottom="10dp"
-                android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#fff"/>
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:textColor="#fff"
+                app:layout_constraintBottom_toTopOf="@id/gs"
+                app:layout_constraintLeft_toLeftOf="@id/gs"
+                app:layout_constraintRight_toRightOf="@id/gs"
+                app:layout_constraintTop_toBottomOf="@id/img" />
 
             <TextView
                 android:id="@+id/gs"
@@ -108,8 +111,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:layout_marginRight="20dp"
                 android:layout_marginTop="55dp"
+                android:layout_marginRight="20dp"
                 android:layout_toRightOf="@id/gs"
                 android:text="Sodio:"
 
@@ -128,18 +131,19 @@
                 app:layout_constraintEnd_toEndOf="@id/so"
                 app:layout_constraintStart_toStartOf="@id/so"
                 app:layout_constraintTop_toBottomOf="@id/so" />
+
             <Button
                 android:id="@+id/btnaddmenu"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                app:layout_constraintTop_toBottomOf="@id/tvgs"
+                android:layout_height="25dp"
+                android:background="@drawable/botonlayout"
+                android:text="Añadir"
+                android:textColor="#fff"
+                android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="@id/layoutres"
                 app:layout_constraintLeft_toLeftOf="@id/layoutres"
                 app:layout_constraintRight_toRightOf="@id/layoutres"
-                android:background="@drawable/botonlayout"
-                android:textSize="10sp"
-                android:text="Añadir"
-                android:textColor="#fff"/>
+                app:layout_constraintTop_toBottomOf="@id/tvgs" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -153,8 +157,6 @@
             app:layout_constraintLeft_toLeftOf="@id/divisoria"
             app:layout_constraintRight_toRightOf="@id/divisoria"
             app:layout_constraintTop_toBottomOf="@id/asist" />
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

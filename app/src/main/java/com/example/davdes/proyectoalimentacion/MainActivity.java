@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.davdes.proyectoalimentacion.Objetos.Alimento;
 import com.google.android.material.navigation.NavigationView;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
@@ -22,6 +23,8 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+
+import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String[] footypes;
     private DrawerLayout mDrawerLayout;
+    ArrayList<Alimento> seleccionados = new ArrayList<>(0) ;
     //private ListView mDrawerList;
 
 
@@ -113,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment = new FragmentoVistaAlimentos();
         Bundle args = new Bundle();
         args.putInt("posicion", position);
+        args.putSerializable("seleccionados",seleccionados);
         fragment.setArguments(args);
 
         // Insert the fragment by replacing any existing fragment
