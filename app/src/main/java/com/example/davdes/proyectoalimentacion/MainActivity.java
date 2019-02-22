@@ -105,6 +105,10 @@ public class MainActivity extends AppCompatActivity {
       //  mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         Fragment fragment = new Fragment_main();
+        Bundle args = new Bundle();
+
+        args.putSerializable("seleccionados",seleccionados);
+        fragment.setArguments(args);
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         fragmentManager.beginTransaction()

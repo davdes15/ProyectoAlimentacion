@@ -22,6 +22,7 @@
         android:textSize="18sp"
         android:layout_height="match_parent"
         android:textAlignment="center"
+
         android:layout_toRightOf="@id/imglista"
         android:gravity="center"
         android:textColor="#fff" />

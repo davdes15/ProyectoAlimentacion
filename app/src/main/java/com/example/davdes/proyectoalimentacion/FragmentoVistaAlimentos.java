@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 
 /**
@@ -55,6 +57,10 @@ public class FragmentoVistaAlimentos extends Fragment {
     private int posicion;
     private ArrayList<String> alim;
     ListView lv;
+    private final int ROJO = 2;
+    private final int VERDE = 0;
+    private final int NARANJA = 1;
+
     int TIMES = 0;
     boolean anima = false;
     ArrayList<Alimento> sel;
@@ -104,6 +110,7 @@ public class FragmentoVistaAlimentos extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         //tvFragment = (TextView) view.findViewById(R.id.tvFragment);
         // tvFragment.setText("Posicion: " + posicion);
         final String ud = posicion == 0 ? "l" : "g";
@@ -150,6 +157,12 @@ public class FragmentoVistaAlimentos extends Fragment {
                 float az = 0f;
                 float gr = 0f;
                 float sod = 0f;
+                float cortevaz = posicion == 0 ? 2.5f : 5f;
+                float cortevgr = 1.5f;
+                float cortevsod = 0.12f;
+                float corteraz = posicion == 0 ? 7.5f : 10f;
+                float cortergr = 5f;
+                float cortersod = 0.6f;
                 int err = 0;
                 try {
                     az = Float.parseFloat(c.getString(1));
@@ -183,23 +196,65 @@ public class FragmentoVistaAlimentos extends Fragment {
                 if (err == 1) {
                     try {
                         sod = Float.parseFloat(c.getString(3).replace(',', '.'));
-                    }catch(Exception e){
+                    } catch (Exception e) {
 
                     }
                 }
+
                 ((TextView) fbDialogue.findViewById(R.id.tvaz)).setText(String.valueOf(az) + " g");
                 ((TextView) fbDialogue.findViewById(R.id.tvgs)).setText(String.valueOf(gr) + " g");
                 ((TextView) fbDialogue.findViewById(R.id.tvs)).setText(String.valueOf(sod) + " mg");
                 float tot = 100f;
-                float peraz = tot * 0.1f;
-                final Alimento al = new Alimento(az,gr,sod,c.getString(0));
-                if(az > peraz){
-                    ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.incorrecto));
-                }else{
-                    ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.correcto));
+                int vaz;
+                int vgr;
+                int vsod;
+                sod/=1000;
+                final Alimento al = new Alimento(az, gr, sod, c.getString(0));
+                if (az > cortevaz) {
+                    if(az < corteraz){
+                        vaz = NARANJA;
+                    }else{
+                        vaz = ROJO;
+                    }
+//                    ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.incorrecto));
+                } else {
+                    vaz = VERDE;
+                //    ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.correcto));
                 }
-                for(Alimento a : sel){
-                    if (c.getString(0).equals(a.getNombre())){
+                if (gr > cortevgr){
+                    if(gr < cortergr){
+                        vgr = NARANJA;
+                    }else{
+                        vgr = ROJO;
+                    }
+                }else{
+                    vgr = VERDE;
+                }
+                if (sod > cortevsod){
+                    if(gr < cortersod){
+                        vsod = NARANJA;
+                    }else{
+                        vsod = ROJO;
+                    }
+                }else{
+                    vsod = VERDE;
+                }
+                int [] comb = {vaz,vgr,vsod};
+                int valoracion = valoracion(comb);
+                switch(valoracion){
+                    case VERDE:
+                        ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.correcto));
+                        break;
+                    case ROJO:
+                        ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.incorrecto));
+                        break;
+                    case NARANJA:
+                        ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.medio));
+                        break;
+                }
+
+                for (Alimento a : sel) {
+                    if (c.getString(0).equals(a.getNombre())) {
                         ((Button) fbDialogue.findViewById(R.id.btnaddmenu)).setEnabled(false);
                     }
                 }
@@ -212,6 +267,33 @@ public class FragmentoVistaAlimentos extends Fragment {
                 });
             }
 
+            public int valoracion(int[] comb){
+                int verdes = 0;
+                int rojos = 0;
+                int naranjas = 0;
+                for (int i:comb){
+                    if (i==VERDE){
+                        verdes++;
+                    }else if(i==NARANJA){
+                        naranjas++;
+                    }else{
+                        rojos++;
+                    }
+                }
+                if(verdes >=2){
+                    if(verdes == 3){
+                        return VERDE;
+                    }else{
+                        return NARANJA;
+                    }
+                }if(rojos>=2){
+                    return ROJO;
+                }else if (verdes==1 & naranjas>1){
+                    return NARANJA;
+                }else{
+                    return ROJO;
+                }
+            }
 
         });
         final View v = view;
@@ -260,7 +342,7 @@ public class FragmentoVistaAlimentos extends Fragment {
                             Log.i("ANIM", String.valueOf(TIMES));
                             tvtitleg.startAnimation(fadeIn);
                             fadeIn.setDuration(1200);
-                            fadeIn.setStartOffset(fadeIn.getStartOffset());
+                            fadeIn.setStartOffset(fadeIn.getStartOffset()-500);
                         }
 
                         tvtitleg.setVisibility(View.VISIBLE);
@@ -318,6 +400,8 @@ public class FragmentoVistaAlimentos extends Fragment {
 
         }
     }
+
+
 
     @Override
     public void onDetach() {

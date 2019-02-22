@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragment_main"
     android:background="#90000000">
 
@@ -11,11 +12,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     <TextView
+        android:id="@+id/tvmain"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         android:text="Texto de prueba arrastra desde la izquierda de la pantalla"
         android:textColor="#fff"/>
+
+        <Button
+            android:id="@+id/btnvermenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tvmain"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:text="ver menu"
+            android:background="@drawable/botonlayout"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
