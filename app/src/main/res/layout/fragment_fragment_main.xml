@@ -7,6 +7,9 @@
     android:background="#90000000">
 
     <!-- TODO: Update blank fragment layout -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <TextView
         android:layout_gravity="center"
         android:gravity="center"
@@ -14,5 +17,5 @@
         android:layout_height="match_parent"
         android:text="Texto de prueba arrastra desde la izquierda de la pantalla"
         android:textColor="#fff"/>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

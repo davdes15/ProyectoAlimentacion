@@ -25,4 +25,5 @@
         android:layout_toRightOf="@id/imglista"
         android:gravity="center"
         android:textColor="#fff" />
+
 </RelativeLayout>

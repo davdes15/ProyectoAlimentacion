@@ -34,7 +34,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:padding="20dp"
+            android:padding="10dp"
             android:visibility="gone"
             android:textColor="#fff"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -43,7 +43,8 @@
             android:id="@+id/listalim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/fondo_main">
+            android:background="#AE331D24"
+            android:divider="@android:color/transparent">
         </ListView>
 
     </LinearLayout>

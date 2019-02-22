@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
@@ -21,6 +22,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.davdes.proyectoalimentacion.Objetos.Alimento;
 
 import java.util.ArrayList;
 
@@ -141,9 +144,64 @@ public class FragmentoVistaAlimentos extends Fragment {
                 fbDialogue.show();
                 c.moveToNext();
                 ((TextView) fbDialogue.findViewById(R.id.tvnombredialog)).setText(String.valueOf(c.getString(0)));
-                ((TextView) fbDialogue.findViewById(R.id.tvaz)).setText(String.valueOf(c.getString(1) + "g"));
-                ((TextView) fbDialogue.findViewById(R.id.tvgs)).setText(String.valueOf(c.getString(2) + "g"));
-                ((TextView) fbDialogue.findViewById(R.id.tvs)).setText(String.valueOf(c.getString(3) + "mg"));
+
+                float az = 0f;
+                float gr = 0f;
+                float sod = 0f;
+                int err = 0;
+                try {
+                    az = Float.parseFloat(c.getString(1));
+                } catch (Exception e) {
+                    err = 1;
+                }
+                if (err == 1) {
+                    try {
+                        az = Float.parseFloat(c.getString(1).replace(',', '.'));
+                    } catch (Exception e) {
+
+                    }
+                }
+                try {
+                    gr = Float.parseFloat(c.getString(2));
+                } catch (Exception e) {
+                    err = 1;
+                }
+                if (err == 1) {
+                    try {
+                        gr = Float.parseFloat(c.getString(2).replace(',', '.'));
+                    } catch (Exception e) {
+
+                    }
+                }
+                try {
+                    sod = Float.parseFloat(c.getString(3));
+                } catch (Exception e) {
+                    err = 1;
+                }
+                if (err == 1) {
+                    try {
+                        sod = Float.parseFloat(c.getString(3).replace(',', '.'));
+                    }catch(Exception e){
+
+                    }
+                }
+                ((TextView) fbDialogue.findViewById(R.id.tvaz)).setText(String.valueOf(az) + " g");
+                ((TextView) fbDialogue.findViewById(R.id.tvgs)).setText(String.valueOf(gr) + " g");
+                ((TextView) fbDialogue.findViewById(R.id.tvs)).setText(String.valueOf(sod) + " mg");
+                float tot = 100f;
+                float peraz = tot * 0.1f;
+                final Alimento al = new Alimento(az,gr,sod,c.getString(0));
+                if(az > peraz){
+                    ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.incorrecto));
+                }else{
+                    ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.correcto));
+                }
+                ((Button) fbDialogue.findViewById(R.id.btnaddmenu)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
             }
 
 
@@ -151,7 +209,10 @@ public class FragmentoVistaAlimentos extends Fragment {
         final View v = view;
         lv.setOnScrollListener(new AbsListView.OnScrollListener() {
             private int mLastFirstVisibleItem;
-            private int firstVisibleItem,  visibleItemCount, totalItemCount;
+            private int firstVisibleItem, visibleItemCount, totalItemCount;
+            protected AlphaAnimation fadeIn = new AlphaAnimation(0.0f, 1.0f);
+            protected AlphaAnimation fadeOut = new AlphaAnimation(1.0f, 0.0f);
+
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 Animation slide = AnimationUtils.loadAnimation(view.getContext(), R.anim.slide_anim);
@@ -189,7 +250,9 @@ public class FragmentoVistaAlimentos extends Fragment {
                         tvtitlep.setVisibility(View.GONE);
                         if (anima) {
                             Log.i("ANIM", String.valueOf(TIMES));
-                            tvtitleg.startAnimation(slide);
+                            tvtitleg.startAnimation(fadeIn);
+                            fadeIn.setDuration(1200);
+                            fadeIn.setStartOffset(fadeIn.getStartOffset());
                         }
 
                         tvtitleg.setVisibility(View.VISIBLE);
@@ -202,11 +265,21 @@ public class FragmentoVistaAlimentos extends Fragment {
                 this.totalItemCount = totalItemCount;
                 if (mLastFirstVisibleItem < firstVisibleItem) {
                     Log.i("SCROLLING DOWN", "TRUE");
+                    if (tvtitlep.getVisibility() != View.VISIBLE) {
+                        tvtitleg.setVisibility(View.GONE);
+                        tvtitleg.startAnimation(fadeOut);
 
-                    tvtitleg.setVisibility(View.GONE);
+                        fadeOut.setDuration(800);
+                        //fadeOut.setFillAfter(true);
+                        tvtitlep.startAnimation(fadeIn);
+                        tvtitlep.setVisibility(View.VISIBLE);
+                        fadeIn.setDuration(700);
+                        //fadeIn.setFillAfter(true);
 
-                    tvtitlep.setVisibility(View.VISIBLE);
+                        fadeOut.setStartOffset(fadeIn.getStartOffset() - 4000);
+                    }
                     anima = true;
+
                 }
                 if (mLastFirstVisibleItem > firstVisibleItem) {
                     Log.i("SCROLLING UP", "TRUE");
