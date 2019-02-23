@@ -25,6 +25,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.davdes.proyectoalimentacion.Objetos.Alimento;
+import com.example.davdes.proyectoalimentacion.metodos.Calculos;
 
 import java.util.ArrayList;
 
@@ -110,6 +111,8 @@ public class FragmentoVistaAlimentos extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
 
         //tvFragment = (TextView) view.findViewById(R.id.tvFragment);
         // tvFragment.setText("Posicion: " + posicion);
@@ -208,40 +211,40 @@ public class FragmentoVistaAlimentos extends Fragment {
                 int vaz;
                 int vgr;
                 int vsod;
-                sod/=1000;
+                sod /= 1000;
                 final Alimento al = new Alimento(az, gr, sod, c.getString(0));
                 if (az > cortevaz) {
-                    if(az < corteraz){
+                    if (az < corteraz) {
                         vaz = NARANJA;
-                    }else{
+                    } else {
                         vaz = ROJO;
                     }
 //                    ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.incorrecto));
                 } else {
                     vaz = VERDE;
-                //    ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.correcto));
+                    //    ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.correcto));
                 }
-                if (gr > cortevgr){
-                    if(gr < cortergr){
+                if (gr > cortevgr) {
+                    if (gr < cortergr) {
                         vgr = NARANJA;
-                    }else{
+                    } else {
                         vgr = ROJO;
                     }
-                }else{
+                } else {
                     vgr = VERDE;
                 }
-                if (sod > cortevsod){
-                    if(gr < cortersod){
+                if (sod > cortevsod) {
+                    if (gr < cortersod) {
                         vsod = NARANJA;
-                    }else{
+                    } else {
                         vsod = ROJO;
                     }
-                }else{
+                } else {
                     vsod = VERDE;
                 }
-                int [] comb = {vaz,vgr,vsod};
-                int valoracion = valoracion(comb);
-                switch(valoracion){
+                int[] comb = {vaz, vgr, vsod};
+                int valoracion = Calculos.valoracion(comb);
+                switch (valoracion) {
                     case VERDE:
                         ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.correcto));
                         break;
@@ -267,33 +270,7 @@ public class FragmentoVistaAlimentos extends Fragment {
                 });
             }
 
-            public int valoracion(int[] comb){
-                int verdes = 0;
-                int rojos = 0;
-                int naranjas = 0;
-                for (int i:comb){
-                    if (i==VERDE){
-                        verdes++;
-                    }else if(i==NARANJA){
-                        naranjas++;
-                    }else{
-                        rojos++;
-                    }
-                }
-                if(verdes >=2){
-                    if(verdes == 3){
-                        return VERDE;
-                    }else{
-                        return NARANJA;
-                    }
-                }if(rojos>=2){
-                    return ROJO;
-                }else if (verdes==1 & naranjas>1){
-                    return NARANJA;
-                }else{
-                    return ROJO;
-                }
-            }
+
 
         });
         final View v = view;
@@ -342,7 +319,7 @@ public class FragmentoVistaAlimentos extends Fragment {
                             Log.i("ANIM", String.valueOf(TIMES));
                             tvtitleg.startAnimation(fadeIn);
                             fadeIn.setDuration(1200);
-                            fadeIn.setStartOffset(fadeIn.getStartOffset()-500);
+                            fadeIn.setStartOffset(fadeIn.getStartOffset() + 500);
                         }
 
                         tvtitleg.setVisibility(View.VISIBLE);
@@ -402,12 +379,12 @@ public class FragmentoVistaAlimentos extends Fragment {
     }
 
 
-
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
+
 
     /**
      * This interface must be implemented by activities that contain this

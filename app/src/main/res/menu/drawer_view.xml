@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="single">
+    <group android:id="@+id/menu_prin" android:checkableBehavior="single" >
+        <item
+            android:id="@+id/nav_main"
+            android:icon="@mipmap/ic_launcher_round"
+            android:title="Principal"/>
+    </group>
+    <group android:id="@+id/menu_sec" android:checkableBehavior="single">
         <item
             android:id="@+id/nav_beb"
             android:icon="@mipmap/ic_launcher_round"

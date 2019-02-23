@@ -7,8 +7,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.davdes.proyectoalimentacion.Objetos.Alimento;
+import com.example.davdes.proyectoalimentacion.metodos.Calculos;
 
 import java.util.ArrayList;
 
@@ -29,10 +34,12 @@ public class Fragment_Menu extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     ArrayList<Alimento> sel;
+    ListView lv;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -99,6 +106,86 @@ public class Fragment_Menu extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        lv = (ListView) view.findViewById(R.id.lista_menu);
+        lv.setAdapter(new AdapterAlimentosMenu(getActivity(), sel));
+        if (!sel.isEmpty()) {
+            ((Button) view.findViewById(R.id.btnmenu)).setVisibility(View.VISIBLE);
+            ((Button) view.findViewById(R.id.btnmenu)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    sel.clear();
+                    getFragmentManager().popBackStack();
+                    v.setEnabled(false);
+                }
+            });
+            float totaz = 0, totgr = 0, totsod = 0;
+            float totgram = 0;
+            for (Alimento a : sel) {
+                totaz += a.getAz();
+                totgr += a.getGr();
+                totsod += a.getSod();
+                totgram += 100f;
+            }
+            int vaz, vgr, vsod;
+            float cortevaz = totgram * 0.05f;
+            float corteraz = totgram * 0.1f;
+            float cortevgr = totgram * 0.015f;
+            float cortergr = totgram * 0.05f;
+            float cortevsod = totgram * 0.0012f;
+            float cortersod = totgram * 0.006f;
+
+            if (totaz > cortevaz) {
+                if (totaz < corteraz) {
+                    vaz = Calculos.NARANJA;
+                } else {
+                    vaz = Calculos.ROJO;
+                }
+//                    ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.incorrecto));
+            } else {
+                vaz = Calculos.VERDE;
+                //    ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.correcto));
+            }
+            if (totgr > cortevgr) {
+                if (totgr < cortergr) {
+                    vgr = Calculos.NARANJA;
+                } else {
+                    vgr = Calculos.ROJO;
+                }
+            } else {
+                vgr = Calculos.VERDE;
+            }
+            if (totsod > cortevsod) {
+                if (totgr < cortersod) {
+                    vsod = Calculos.NARANJA;
+                } else {
+                    vsod = Calculos.ROJO;
+                }
+            } else {
+                vsod = Calculos.VERDE;
+            }
+            int[] comb = {vaz, vgr, vsod};
+            int valoracion = Calculos.valoracion(comb);
+
+            switch (valoracion) {
+                case Calculos.VERDE:
+                    ((LinearLayout) view.findViewById(R.id.res_menu)).setBackground(getResources().getDrawable(R.drawable.menu_correcto));
+                    break;
+                case Calculos.ROJO:
+                    ((LinearLayout) view.findViewById(R.id.res_menu)).setBackground(getResources().getDrawable(R.drawable.menu_incorrecto));
+                    break;
+                case Calculos.NARANJA:
+                    ((LinearLayout) view.findViewById(R.id.res_menu)).setBackground(getResources().getDrawable(R.drawable.menu_medio));
+                    break;
+            }
+        }else{
+
+        }
+
+    }
 
     /**
      * This interface must be implemented by activities that contain this

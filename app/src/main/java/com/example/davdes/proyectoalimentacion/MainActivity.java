@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -36,25 +37,18 @@ public class MainActivity extends AppCompatActivity {
 
     private String[] footypes;
     private DrawerLayout mDrawerLayout;
-    ArrayList<Alimento> seleccionados = new ArrayList<>(0) ;
+    ArrayList<Alimento> seleccionados = new ArrayList<>(0);
     //private ListView mDrawerList;
-
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+      /*  getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);*/
         setContentView(R.layout.activity_main);
-
-
-
         footypes = getResources().getStringArray(R.array.planets_array);
-
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navview = (NavigationView) findViewById(R.id.nav_view);
         navview.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -64,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 mDrawerLayout.closeDrawers();
                 int id = menuItem.getItemId();
                 int pos = -1;
-                switch (id){
+                switch (id) {
                     case R.id.nav_beb:
                         pos = 0;
                         break;
@@ -89,25 +83,27 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_verd:
                         pos = 7;
                         break;
-
+                    case R.id.nav_main:
+                        pos = -1;
+                        break;
                 }
                 selectItem(pos);
 
                 return true;
             }
         });
-       // mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        // mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
         // Set the adapter for the list view
-      //  mDrawerList.setAdapter(new ArrayAdapter<>(this,
-       //         android.R.layout.simple_list_item_1, footypes));
+        //  mDrawerList.setAdapter(new ArrayAdapter<>(this,
+        //         android.R.layout.simple_list_item_1, footypes));
         // Set the list's click listener
-      //  mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        //  mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         Fragment fragment = new Fragment_main();
         Bundle args = new Bundle();
 
-        args.putSerializable("seleccionados",seleccionados);
+        args.putSerializable("seleccionados", seleccionados);
         fragment.setArguments(args);
         FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -116,26 +112,62 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
     public void selectItem(int position) {
         // Create a new fragment and specify the planet to show based on position
-        Fragment fragment = new FragmentoVistaAlimentos();
-        Bundle args = new Bundle();
-        args.putInt("posicion", position);
-        args.putSerializable("seleccionados",seleccionados);
-        fragment.setArguments(args);
+        if (position!=-1) {
+            Fragment fragment = new FragmentoVistaAlimentos();
+            Bundle args = new Bundle();
+            args.putInt("posicion", position);
+            args.putSerializable("seleccionados", seleccionados);
+            fragment.setArguments(args);
 
-        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
+            // Insert the fragment by replacing any existing fragment
+            FragmentManager fragmentManager = getSupportFragmentManager();
 
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_pane, fragment).addToBackStack("fragmentini").commit();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_pane, fragment).addToBackStack("inicial").commit();
 
 
-        // Highlight the selected item, update the title, and close the drawer
-        //mDrawerList.setItemChecked(position, true);
-        setTitle(footypes[position]);
-        //mDrawerLayout.closeDrawer(mDrawerList);
-        Log.i("INFO_ALIMENTOS", "Posicion: " + position);
+            // Highlight the selected item, update the title, and close the drawer
+            //mDrawerList.setItemChecked(position, true);
+            setTitle(footypes[position]);
+            //mDrawerLayout.closeDrawer(mDrawerList);
+            Log.i("INFO_ALIMENTOS", "Posicion: " + position);
+        }else{
+            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            Fragment fragment = new Fragment_main();
+            Bundle args = new Bundle();
+
+            args.putSerializable("seleccionados", seleccionados);
+            fragment.setArguments(args);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_pane, fragment).commit();
+        }
+    }
+
+    // con este metodo puedo gestionar lo que hacer si le doy a back, si hay algun fragment en el backstack vuelvo al main
+    // cuando vuelvo al main limpio el backstack
+    // si estoy en el main, el backstack estará vacío, saldra de la app
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            super.onBackPressed();
+        }else {
+            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            Fragment fragment = new Fragment_main();
+            Bundle args = new Bundle();
+
+            args.putSerializable("seleccionados", seleccionados);
+            fragment.setArguments(args);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_pane, fragment).commit();
+
+        }
     }
 
     /*public class DrawerItemClickListener implements ListView.OnItemClickListener {

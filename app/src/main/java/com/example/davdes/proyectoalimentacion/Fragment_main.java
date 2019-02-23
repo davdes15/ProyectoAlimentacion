@@ -90,6 +90,9 @@ public class Fragment_main extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if(sel.isEmpty()){
+            ((Button) view.findViewById(R.id.btnvermenu)).setEnabled(false);
+        }
         ((Button) view.findViewById(R.id.btnvermenu)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
