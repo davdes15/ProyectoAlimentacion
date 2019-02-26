@@ -266,6 +266,8 @@ public class FragmentoVistaAlimentos extends Fragment {
                     public void onClick(View v) {
                         v.setEnabled(false);
                         sel.add(al);
+
+
                     }
                 });
             }
@@ -316,10 +318,13 @@ public class FragmentoVistaAlimentos extends Fragment {
 
                         tvtitlep.setVisibility(View.GONE);
                         if (anima) {
+                            AlphaAnimation fade = new AlphaAnimation(0.0f, 1.0f);
                             Log.i("ANIM", String.valueOf(TIMES));
-                            tvtitleg.startAnimation(fadeIn);
-                            fadeIn.setDuration(1200);
-                            fadeIn.setStartOffset(fadeIn.getStartOffset() + 500);
+                            tvtitleg.startAnimation(fade);
+                            fade.setDuration(1200);
+                            fadeIn.cancel();
+                           // fade.setStartOffset(fadeIn.getStartOffset()+150);
+
                         }
 
                         tvtitleg.setVisibility(View.VISIBLE);
