@@ -266,6 +266,7 @@ public class FragmentoVistaAlimentos extends Fragment {
                     public void onClick(View v) {
                         v.setEnabled(false);
                         sel.add(al);
+                        fbDialogue.cancel();
 
 
                     }
