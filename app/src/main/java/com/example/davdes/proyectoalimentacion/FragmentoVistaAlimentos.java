@@ -239,7 +239,7 @@ public class FragmentoVistaAlimentos extends Fragment {
                         vgr = VERDE;
                     }
                     if (sod > cortevsod) {
-                        if (gr < cortersod) {
+                        if (sod < cortersod) {
                             vsod = NARANJA;
                         } else {
                             vsod = ROJO;
@@ -251,6 +251,7 @@ public class FragmentoVistaAlimentos extends Fragment {
                     valoracion = Calculos.valoracion(comb);
                 } else {
                     valoracion = VERDE;
+                    al.setFruta(true);
                 }
                 switch (valoracion) {
                     case VERDE:

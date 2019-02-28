@@ -113,7 +113,7 @@ public class Fragment_Menu extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        final View vista = view;
         lv = (ListView) view.findViewById(R.id.lista_menu);
         lv.setAdapter(new AdapterAlimentosMenu(getActivity(), sel));
         if (!sel.isEmpty()) {
@@ -126,53 +126,7 @@ public class Fragment_Menu extends Fragment {
                     v.setEnabled(false);
                 }
             });
-            float totaz = 0, totgr = 0, totsod = 0;
-            float totgram = 0;
-            for (Alimento a : sel) {
-                totaz += a.getAz();
-                totgr += a.getGr();
-                totsod += a.getSod();
-                totgram += 100f;
-            }
-            int vaz, vgr, vsod;
-            float cortevaz = totgram * 0.05f;
-            float corteraz = totgram * 0.1f;
-            float cortevgr = totgram * 0.015f;
-            float cortergr = totgram * 0.05f;
-            float cortevsod = totgram * 0.0012f;
-            float cortersod = totgram * 0.006f;
-
-            if (totaz > cortevaz) {
-                if (totaz < corteraz) {
-                    vaz = Calculos.NARANJA;
-                } else {
-                    vaz = Calculos.ROJO;
-                }
-//                    ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.incorrecto));
-            } else {
-                vaz = Calculos.VERDE;
-                //    ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.correcto));
-            }
-            if (totgr > cortevgr) {
-                if (totgr < cortergr) {
-                    vgr = Calculos.NARANJA;
-                } else {
-                    vgr = Calculos.ROJO;
-                }
-            } else {
-                vgr = Calculos.VERDE;
-            }
-            if (totsod > cortevsod) {
-                if (totgr < cortersod) {
-                    vsod = Calculos.NARANJA;
-                } else {
-                    vsod = Calculos.ROJO;
-                }
-            } else {
-                vsod = Calculos.VERDE;
-            }
-            int[] comb = {vaz, vgr, vsod};
-            int valoracion = Calculos.valoracion(comb);
+            int valoracion = cambiocolor();
 
             switch (valoracion) {
                 case Calculos.VERDE:
@@ -189,7 +143,7 @@ public class Fragment_Menu extends Fragment {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Alimento a = sel.get(position);
+                final Alimento a = sel.get(position);
 
 
                 final Dialog fbDialogue = new Dialog(view.getContext(), android.R.style.Theme_Black_NoTitleBar);
@@ -198,23 +152,147 @@ public class Fragment_Menu extends Fragment {
 
                 fbDialogue.setCancelable(true);
                 fbDialogue.show();
-                float cortevaz = 100 * 0.05f;
-                float corteraz = 100 * 0.1f;
+                float cortevaz = a.isLiquido() ? 100 * 0.025f : 100 * 0.05f;
+                float corteraz = a.isLiquido() ? 100 * 0.075f : 100 * 0.1f;
                 float cortevgr = 100 * 0.015f;
                 float cortergr = 100 * 0.05f;
                 float cortevsod = 100 * 0.0012f;
-                float cortersod = 100* 0.006f;
+                float cortersod = 100 * 0.006f;
+                int vaz,vgr,vsod;
+                int valoracion;
+                if(!a.isFruta()) {
+                    if (a.getAz() > cortevaz) {
+                        if (a.getAz() < corteraz) {
+                            vaz = Calculos.NARANJA;
+                        } else {
+                            vaz = Calculos.ROJO;
+                        }
+//                    ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.incorrecto));
+                    } else {
+                        vaz = Calculos.VERDE;
+                        //    ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.correcto));
+                    }
+                    if (a.getGr() > cortevgr) {
+                        if (a.getGr() < cortergr) {
+                            vgr = Calculos.NARANJA;
+                        } else {
+                            vgr = Calculos.ROJO;
+                        }
+                    } else {
+                        vgr = Calculos.VERDE;
+                    }
+                    if (a.getSod() > cortevsod) {
+                        if (a.getSod() < cortersod) {
+                            vsod = Calculos.NARANJA;
+                        } else {
+                            vsod = Calculos.ROJO;
+                        }
+                    } else {
+                        vsod = Calculos.VERDE;
+                    }
+                    int[] comb = {vaz, vgr, vsod};
+                valoracion =Calculos.valoracion(comb);
+                }else{
+                    valoracion=Calculos.VERDE;
+                }
+                switch (valoracion) {
+                    case Calculos.VERDE:
+                        ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.correcto));
+                        break;
+                    case Calculos.ROJO:
+                        ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.incorrecto));
+                        break;
+                    case Calculos.NARANJA:
+                        ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.medio));
+                        break;
+                }
+                ((TextView) fbDialogue.findViewById(R.id.tvnombredialog)).setText(a.getNombre());
+                ((TextView) fbDialogue.findViewById(R.id.tvaz)).setText(String.valueOf(a.getAz()));
+                ((TextView) fbDialogue.findViewById(R.id.tvgs)).setText(String.valueOf(a.getGr()));
+                ((TextView) fbDialogue.findViewById(R.id.tvs)).setText(String.valueOf(a.getSod()));
+                ((Button) fbDialogue.findViewById(R.id.btnaddmenu)).setText("Eliminar");
+                ((Button) fbDialogue.findViewById(R.id.btnaddmenu)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        sel.remove(a);
 
-                ((TextView)fbDialogue.findViewById(R.id.tvnombredialog)).setText(a.getNombre());
-                ((TextView)fbDialogue.findViewById(R.id.tvaz)).setText(String.valueOf(a.getAz()));
-                ((TextView)fbDialogue.findViewById(R.id.tvgs)).setText(String.valueOf(a.getGr()));
-                ((TextView)fbDialogue.findViewById(R.id.tvs)).setText(String.valueOf(a.getSod()));
-                ((Button)fbDialogue.findViewById(R.id.btnaddmenu)).setText("Eliminar");
+                        lv.invalidateViews();
+
+                        fbDialogue.cancel();
+                        if(sel.size()==0){
+                            getFragmentManager().popBackStack();
+                        }
+                        int valoracion = cambiocolor();
+                        switch (valoracion) {
+                            case Calculos.VERDE:
+                                ((LinearLayout) vista.findViewById(R.id.res_menu)).setBackground(getResources().getDrawable(R.drawable.menu_correcto));
+                                break;
+                            case Calculos.ROJO:
+                                ((LinearLayout) vista.findViewById(R.id.res_menu)).setBackground(getResources().getDrawable(R.drawable.menu_incorrecto));
+                                break;
+                            case Calculos.NARANJA:
+                                ((LinearLayout) vista.findViewById(R.id.res_menu)).setBackground(getResources().getDrawable(R.drawable.menu_medio));
+                                break;
+                        }
+
+                    }
+                });
 
 
             }
         });
 
+
+
+    }
+    public int cambiocolor(){
+        float totaz = 0, totgr = 0, totsod = 0;
+        float totgram = 0;
+        for (Alimento a : sel) {
+            totaz += a.getAz();
+            totgr += a.getGr();
+            totsod += a.getSod();
+            totgram += 100f;
+        }
+        int vaz, vgr, vsod;
+        float cortevaz = totgram * 0.05f;
+        float corteraz = totgram * 0.1f;
+        float cortevgr = totgram * 0.015f;
+        float cortergr = totgram * 0.05f;
+        float cortevsod = totgram * 0.0012f;
+        float cortersod = totgram * 0.006f;
+
+        if (totaz > cortevaz) {
+            if (totaz < corteraz) {
+                vaz = Calculos.NARANJA;
+            } else {
+                vaz = Calculos.ROJO;
+            }
+//                    ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.incorrecto));
+        } else {
+            vaz = Calculos.VERDE;
+            //    ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.correcto));
+        }
+        if (totgr > cortevgr) {
+            if (totgr < cortergr) {
+                vgr = Calculos.NARANJA;
+            } else {
+                vgr = Calculos.ROJO;
+            }
+        } else {
+            vgr = Calculos.VERDE;
+        }
+        if (totsod > cortevsod) {
+            if (totsod < cortersod) {
+                vsod = Calculos.NARANJA;
+            } else {
+                vsod = Calculos.ROJO;
+            }
+        } else {
+            vsod = Calculos.VERDE;
+        }
+        int[] comb = {vaz, vgr, vsod};
+        return Calculos.valoracion(comb);
     }
 
     /**

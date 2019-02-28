@@ -6,6 +6,7 @@ public class Alimento implements Serializable {
     private float az,gr,sod;
     private String nombre;
     boolean liquido = false;
+    boolean fruta = false;
 
     public Alimento(float az, float gr, float sod, String nombre) {
         this.az = az;
@@ -48,6 +49,14 @@ public class Alimento implements Serializable {
 
     public void setLiquido(boolean liquido) {
         this.liquido = liquido;
+    }
+
+    public boolean isFruta() {
+        return fruta;
+    }
+
+    public void setFruta(boolean fruta) {
+        this.fruta = fruta;
     }
 
     public void setNombre(String nombre) {
