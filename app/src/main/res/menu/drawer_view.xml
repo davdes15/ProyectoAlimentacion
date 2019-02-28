@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:id="@+id/menu_prin" android:checkableBehavior="single" >
+    <group android:id="@+id/menu_prin" android:checkableBehavior="single"  >
         <item
             android:id="@+id/nav_main"
             android:icon="@mipmap/ic_launcher_round"
@@ -39,6 +39,19 @@
             android:id="@+id/nav_verd"
             android:icon="@mipmap/ic_launcher_round"
             android:title="Verduras e Hortalizas" />
+
+    </group>
+    <group android:id="@+id/menu_metbas" android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_imc"
+            android:title="IMC"
+            android:icon="@mipmap/ic_launcher_round"
+            />
+        <item
+            android:id="@+id/nav_met"
+            android:title="Metbaolismo basal"
+            android:icon="@mipmap/ic_launcher_round"
+            />
 
     </group>
 

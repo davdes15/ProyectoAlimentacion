@@ -151,7 +151,7 @@ public class FragmentoVistaAlimentos extends Fragment {
                 fbDialogue.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
                 fbDialogue.setContentView(R.layout.dialogo_comida);
 
-                fbDialogue.setCancelable(true);
+
                 fbDialogue.show();
                 c.moveToNext();
                 ((TextView) fbDialogue.findViewById(R.id.tvnombredialog)).setText(String.valueOf(c.getString(0)));

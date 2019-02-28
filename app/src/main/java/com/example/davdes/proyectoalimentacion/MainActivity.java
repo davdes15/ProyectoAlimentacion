@@ -1,32 +1,18 @@
 package com.example.davdes.proyectoalimentacion;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
+
 import android.view.MenuItem;
-import android.view.View;
+
 import android.view.Window;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+
 
 import com.example.davdes.proyectoalimentacion.Objetos.Alimento;
 import com.google.android.material.navigation.NavigationView;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.MiniDrawer;
-import com.mikepenz.materialdrawer.interfaces.ICrossfader;
-import com.mikepenz.materialdrawer.model.DividerDrawerItem;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-
 import java.util.ArrayList;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -86,6 +72,12 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_main:
                         pos = -1;
                         break;
+                    case R.id.nav_imc:
+                        pos = 8;
+                        break;
+                    case R.id.nav_met:
+                        pos = 9;
+                        break;
                 }
                 selectItem(pos);
 
@@ -115,37 +107,47 @@ public class MainActivity extends AppCompatActivity {
 
     public void selectItem(int position) {
         // Create a new fragment and specify the planet to show based on position
-        if (position!=-1) {
-            Fragment fragment = new FragmentoVistaAlimentos();
-            Bundle args = new Bundle();
-            args.putInt("posicion", position);
-            args.putSerializable("seleccionados", seleccionados);
-            fragment.setArguments(args);
+        switch (position){
+            case -1:
+                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                Fragment fragment = new Fragment_main();
+                Bundle args = new Bundle();
 
-            // Insert the fragment by replacing any existing fragment
-            FragmentManager fragmentManager = getSupportFragmentManager();
+                args.putSerializable("seleccionados", seleccionados);
+                fragment.setArguments(args);
+                FragmentManager fragmentManager = getSupportFragmentManager();
 
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_pane, fragment).addToBackStack("inicial").commit();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_pane, fragment).commit();
+                break;
+            case 8:
+                Fragment fragmentimc = new IMC();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_pane,fragmentimc).addToBackStack("ini").commit();
+                break;
+            case 9:
+                break;
+            default:
+                Fragment fragmentm = new FragmentoVistaAlimentos();
+                Bundle argss = new Bundle();
+                argss.putInt("posicion", position);
+                argss.putSerializable("seleccionados", seleccionados);
+                fragmentm.setArguments(argss);
+
+                // Insert the fragment by replacing any existing fragment
+                FragmentManager fragmentManager1 = getSupportFragmentManager();
+
+                fragmentManager1.beginTransaction()
+                        .replace(R.id.content_pane, fragmentm).addToBackStack("inicial").commit();
 
 
-            // Highlight the selected item, update the title, and close the drawer
-            //mDrawerList.setItemChecked(position, true);
-            setTitle(footypes[position]);
-            //mDrawerLayout.closeDrawer(mDrawerList);
-            Log.i("INFO_ALIMENTOS", "Posicion: " + position);
-        }else{
-            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            Fragment fragment = new Fragment_main();
-            Bundle args = new Bundle();
-
-            args.putSerializable("seleccionados", seleccionados);
-            fragment.setArguments(args);
-            FragmentManager fragmentManager = getSupportFragmentManager();
-
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_pane, fragment).commit();
+                // Highlight the selected item, update the title, and close the drawer
+                //mDrawerList.setItemChecked(position, true);
+                setTitle(footypes[position]);
+                //mDrawerLayout.closeDrawer(mDrawerList);
+                Log.i("INFO_ALIMENTOS", "Posicion: " + position);
+                break;
         }
+
     }
 
     // con este metodo puedo gestionar lo que hacer si le doy a back, si hay algun fragment en el backstack vuelvo al main

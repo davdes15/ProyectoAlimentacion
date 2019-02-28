@@ -150,7 +150,7 @@ public class Fragment_Menu extends Fragment {
                 fbDialogue.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
                 fbDialogue.setContentView(R.layout.dialogo_comida);
 
-                fbDialogue.setCancelable(true);
+
                 fbDialogue.show();
                 float cortevaz = a.isLiquido() ? 100 * 0.025f : 100 * 0.05f;
                 float corteraz = a.isLiquido() ? 100 * 0.075f : 100 * 0.1f;
