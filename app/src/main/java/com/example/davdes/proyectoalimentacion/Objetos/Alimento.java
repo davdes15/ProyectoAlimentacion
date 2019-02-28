@@ -1,8 +1,11 @@
 package com.example.davdes.proyectoalimentacion.Objetos;
 
-public class Alimento {
+import java.io.Serializable;
+
+public class Alimento implements Serializable {
     private float az,gr,sod;
     private String nombre;
+    boolean liquido = false;
 
     public Alimento(float az, float gr, float sod, String nombre) {
         this.az = az;
@@ -37,6 +40,14 @@ public class Alimento {
 
     public String getNombre() {
         return nombre;
+    }
+
+    public boolean isLiquido() {
+        return liquido;
+    }
+
+    public void setLiquido(boolean liquido) {
+        this.liquido = liquido;
     }
 
     public void setNombre(String nombre) {

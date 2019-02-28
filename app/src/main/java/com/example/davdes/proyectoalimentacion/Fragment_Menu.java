@@ -1,12 +1,16 @@
 package com.example.davdes.proyectoalimentacion;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -181,9 +185,35 @@ public class Fragment_Menu extends Fragment {
                     ((LinearLayout) view.findViewById(R.id.res_menu)).setBackground(getResources().getDrawable(R.drawable.menu_medio));
                     break;
             }
-        }else{
-
         }
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Alimento a = sel.get(position);
+
+
+                final Dialog fbDialogue = new Dialog(view.getContext(), android.R.style.Theme_Black_NoTitleBar);
+                fbDialogue.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
+                fbDialogue.setContentView(R.layout.dialogo_comida);
+
+                fbDialogue.setCancelable(true);
+                fbDialogue.show();
+                float cortevaz = 100 * 0.05f;
+                float corteraz = 100 * 0.1f;
+                float cortevgr = 100 * 0.015f;
+                float cortergr = 100 * 0.05f;
+                float cortevsod = 100 * 0.0012f;
+                float cortersod = 100* 0.006f;
+
+                ((TextView)fbDialogue.findViewById(R.id.tvnombredialog)).setText(a.getNombre());
+                ((TextView)fbDialogue.findViewById(R.id.tvaz)).setText(String.valueOf(a.getAz()));
+                ((TextView)fbDialogue.findViewById(R.id.tvgs)).setText(String.valueOf(a.getGr()));
+                ((TextView)fbDialogue.findViewById(R.id.tvs)).setText(String.valueOf(a.getSod()));
+                ((Button)fbDialogue.findViewById(R.id.btnaddmenu)).setText("Eliminar");
+
+
+            }
+        });
 
     }
 

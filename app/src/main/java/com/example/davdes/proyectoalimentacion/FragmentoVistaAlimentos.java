@@ -113,7 +113,6 @@ public class FragmentoVistaAlimentos extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-
         //tvFragment = (TextView) view.findViewById(R.id.tvFragment);
         // tvFragment.setText("Posicion: " + posicion);
         final String ud = posicion == 0 ? "l" : "g";
@@ -156,6 +155,7 @@ public class FragmentoVistaAlimentos extends Fragment {
                 fbDialogue.show();
                 c.moveToNext();
                 ((TextView) fbDialogue.findViewById(R.id.tvnombredialog)).setText(String.valueOf(c.getString(0)));
+                int valoracion;
 
                 float az = 0f;
                 float gr = 0f;
@@ -208,42 +208,50 @@ public class FragmentoVistaAlimentos extends Fragment {
                 ((TextView) fbDialogue.findViewById(R.id.tvgs)).setText(String.valueOf(gr) + " g");
                 ((TextView) fbDialogue.findViewById(R.id.tvs)).setText(String.valueOf(sod) + " mg");
                 float tot = 100f;
+
                 int vaz;
                 int vgr;
                 int vsod;
                 sod /= 1000;
                 final Alimento al = new Alimento(az, gr, sod, c.getString(0));
-                if (az > cortevaz) {
-                    if (az < corteraz) {
-                        vaz = NARANJA;
-                    } else {
-                        vaz = ROJO;
-                    }
+                if(posicion==1){
+                    al.setLiquido(true);
+                }
+                if (!tablaactual.equals("froita")) {
+                    if (az > cortevaz) {
+                        if (az < corteraz) {
+                            vaz = NARANJA;
+                        } else {
+                            vaz = ROJO;
+                        }
 //                    ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.incorrecto));
-                } else {
-                    vaz = VERDE;
-                    //    ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.correcto));
-                }
-                if (gr > cortevgr) {
-                    if (gr < cortergr) {
-                        vgr = NARANJA;
                     } else {
-                        vgr = ROJO;
+                        vaz = VERDE;
+                        //    ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.correcto));
                     }
-                } else {
-                    vgr = VERDE;
-                }
-                if (sod > cortevsod) {
-                    if (gr < cortersod) {
-                        vsod = NARANJA;
+                    if (gr > cortevgr) {
+                        if (gr < cortergr) {
+                            vgr = NARANJA;
+                        } else {
+                            vgr = ROJO;
+                        }
                     } else {
-                        vsod = ROJO;
+                        vgr = VERDE;
                     }
+                    if (sod > cortevsod) {
+                        if (gr < cortersod) {
+                            vsod = NARANJA;
+                        } else {
+                            vsod = ROJO;
+                        }
+                    } else {
+                        vsod = VERDE;
+                    }
+                    int[] comb = {vaz, vgr, vsod};
+                    valoracion = Calculos.valoracion(comb);
                 } else {
-                    vsod = VERDE;
+                    valoracion = VERDE;
                 }
-                int[] comb = {vaz, vgr, vsod};
-                int valoracion = Calculos.valoracion(comb);
                 switch (valoracion) {
                     case VERDE:
                         ((TextView) fbDialogue.findViewById(R.id.tvresultado)).setBackground(getResources().getDrawable(R.drawable.correcto));
@@ -272,7 +280,6 @@ public class FragmentoVistaAlimentos extends Fragment {
                     }
                 });
             }
-
 
 
         });
@@ -324,7 +331,7 @@ public class FragmentoVistaAlimentos extends Fragment {
                             tvtitleg.startAnimation(fade);
                             fade.setDuration(1200);
                             fadeIn.cancel();
-                           // fade.setStartOffset(fadeIn.getStartOffset()+150);
+                            // fade.setStartOffset(fadeIn.getStartOffset()+150);
 
                         }
 
