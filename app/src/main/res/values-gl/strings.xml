@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ProyectoAlimentacion</string>
     <string-array name="planets_array">
@@ -21,12 +22,11 @@
         <item>verduras e hortalizas.</item>
     </string-array>
 
-    <string name="az">Azúcares:</string>
-    <string name="gr">Grasas:</string>
+    <string name="az">Azucres:</string>
+    <string name="gr">Graxas:</string>
 
     <string name="sod">Sodio:</string>
+    <string name="sal">BENVIDO A NOME POR DETERMINAR</string>
+    <string name="textoini">Para comezar arrastre dende a esquerda da pantalla</string>
 
-
-    <string name="sal">BIENVENIDO A NOMBRE POR DETERMINAR</string>
-    <string name="textoini">Para comenzar arrastre desde la izquierda de la pantalla</string>
 </resources>
