@@ -55,6 +55,7 @@
             android:textColor="#FF92F1"/>
 
         <EditText
+            android:id="@+id/etp"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:hint="Peso"

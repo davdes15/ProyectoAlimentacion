@@ -1,13 +1,22 @@
 package com.example.davdes.proyectoalimentacion;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.ParseException;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 
@@ -90,6 +99,59 @@ public class IMC extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        final View vista = view;
+
+        ((Button) view.findViewById(R.id.btncalcimc)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    float altura = Float.parseFloat(((TextView) vista.findViewById(R.id.etalt)).getText().toString());
+                    float peso = Float.parseFloat(((TextView) vista.findViewById(R.id.etp)).getText().toString());
+                    float imc = peso / (altura * altura);
+                    Log.i("IMC", String.valueOf(imc));
+                    ((TextView) vista.findViewById(R.id.etalt)).setText("");
+                    ((TextView) vista.findViewById(R.id.etp)).setText("");
+                    final Dialog fbDialogue = new Dialog(vista.getContext(), android.R.style.Theme_Black_NoTitleBar);
+                    fbDialogue.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
+                    fbDialogue.setContentView(R.layout.layout_dialogo_imc);
+                    fbDialogue.show();
+                    ((TextView) fbDialogue.findViewById(R.id.resIMC)).setText(String.format("%.2f",imc));
+                    String s = "";
+                    if (imc < 16) {
+                        s = "Desnutrición grave";
+                    } else if (imc < 17) {
+                        s = "Desnutrición moderada";
+                    } else if (imc < 19) {
+                        s = "Desnutrición leve";
+                    } else if (imc < 25) {
+                        s = "Normopeso";
+                    } else if (imc < 30) {
+                        s = "Sobrepeso";
+                    }else if(imc < 34.9f){
+                        s = "Obesidad tipo 1";
+                    }else if (imc < 39.9f){
+                        s="Obesidad tipo 2";
+                    }else{
+                        s="Obesidad Morbida";
+                    }
+                    ((TextView) fbDialogue.findViewById(R.id.resENUT)).setText(s);
+                    ((Button) fbDialogue.findViewById(R.id.btndialimc)).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            fbDialogue.cancel();
+                        }
+                    });
+                } catch (Exception e) {
+
+                }
+            }
+        });
+
     }
 
     /**
